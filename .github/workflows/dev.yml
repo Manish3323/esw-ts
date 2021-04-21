@@ -68,7 +68,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Coverage
-          path: ./libe/coverage
+          path: ./lib/coverage
 
       - name: Notify slack
         if: always()
