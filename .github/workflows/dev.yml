@@ -77,6 +77,14 @@ jobs:
         with:
           name: RTM
           path: ./RTM
+          
+      - name: Upload Coverage
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v2
+        with:
+          name: Coverage
+          path: ./libe/coverage
 
       - name: Notify slack
         if: always()
