@@ -44,25 +44,9 @@ jobs:
         working-directory: ./lib
         run: npm run build
 
-      - name: Paradox Validate Links
-        run: sbtn paradoxValidateLinks
-
       - name: Unit tests
         working-directory: ./lib
         run: npm run test:unit:ci
-
-      - name: Integration tests
-        working-directory: ./lib
-        run: npm run test:integration:ci
-
-      - name: Build - Example App
-        working-directory: ./example
-        run: |
-          npm ci
-          npm run build
-
-      - name: Selenium Test
-        run: sbt -Dprod.publish=true -DgenerateStoryReport=true -DRTM_PATH=./RTM -DOUTPUT_FILE=./testStoryMapping.txt clean test
 
       - name: Generate RTM
         if: always()
