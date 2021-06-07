@@ -1,4 +1,4 @@
-import { AlarmKey, AlarmService, Done, Prefix } from '@tmtsoftware/esw-ts'
+import { AlarmKey, AlarmService, Done, Prefix } from '@manish3323/esw-ts'
 
 // #alarm-service-creation
 const alarmService = await AlarmService()

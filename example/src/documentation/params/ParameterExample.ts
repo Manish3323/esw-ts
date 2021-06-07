@@ -19,8 +19,8 @@ import {
   CoordKey,
   coordKey,
   CometCoord
-} from '@tmtsoftware/esw-ts'
-import { Tag } from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
+import { Tag } from '@manish3323/esw-ts'
 
 //#param-from-key
 

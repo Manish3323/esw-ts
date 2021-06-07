@@ -1,6 +1,6 @@
 {
-  "name": "@tmtsoftware/esw-ts",
-  "version": "0.1.0",
+  "name": "@manish3323/esw-ts",
+  "version": "0.1.4",
   "description": "Typescript client for gateway",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
@@ -8,7 +8,7 @@
   "scripts": {
     "audit": "npm audit",
     "clean": "rm -rf dist && mkdir dist",
-    "install": "npm run clean && tsc",
+    "prepare": "npm run clean && tsc",
     "prebuild": "npm run clean && npm-run-all --parallel fix audit",
     "build": "tsc",
     "build:watch": "tsc -w",
@@ -76,7 +76,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tmtsoftware/esw-ts.git"
+    "url": "git+https://github.com/manish3323/esw-ts.git"
   },
   "keywords": [
     "typescript",
@@ -85,7 +85,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tmtsoftware/esw-ts/issues"
+    "url": "https://github.com/manish3323/esw-ts/issues"
   },
-  "homepage": "https://github.com/tmtsoftware/esw-ts#readme"
+  "homepage": "https://github.com/manish3323/esw-ts#readme"
 }

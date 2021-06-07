@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import React, { useContext } from 'react'
 // #import-components
-import { AuthContext, Logout, Login } from '@tmtsoftware/esw-ts'
+import { AuthContext, Logout, Login } from '@manish3323/esw-ts'
 // #import-components
 
 const NavComponent = () => {

@@ -9,7 +9,7 @@ import {
   StringKey,
   stringKey,
   SystemEvent
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 //#event
 const source = new Prefix('IRIS', 'filter.wheel')
 const eventName = new EventName('temperatures')

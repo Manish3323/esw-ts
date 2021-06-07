@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext, ConfigService } from '@tmtsoftware/esw-ts'
+import { AuthContext, ConfigService } from '@manish3323/esw-ts'
 import { ConfigContext, defaultConfigServiceState } from './ConfigContext'
 
 //#config-service-provider

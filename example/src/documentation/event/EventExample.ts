@@ -11,7 +11,7 @@ import {
   Prefix,
   ServiceError,
   Subscription
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 //#event-service
 const eventService: EventService = await EventService()

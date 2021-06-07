@@ -7,7 +7,7 @@ import {
   Setup,
   stringKey,
   Wait
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 //#obsid
 const obsId: string = 'Obs001'
 //#obsid

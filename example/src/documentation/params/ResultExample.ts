@@ -1,11 +1,11 @@
-import type { IntKey, Option, StringKey } from '@tmtsoftware/esw-ts'
+import type { IntKey, Option, StringKey } from '@manish3323/esw-ts'
 import {
   stringKey,
   intKey,
   Prefix,
   Parameter,
   Result
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 //#result
 //keys
 

@@ -7,7 +7,7 @@ import {
   Setup,
   SpawnResponse,
   SubmitResponse
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 const someService = {
   api: () => {}

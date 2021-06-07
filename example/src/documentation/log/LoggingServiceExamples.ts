@@ -6,7 +6,7 @@ import {
   LoggingService,
   Prefix,
   Setup
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 //#logging-service-creation
 const loggingService: LoggingService = await LoggingService()

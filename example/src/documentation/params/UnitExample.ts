@@ -3,13 +3,13 @@ import type {
   ShortKey,
   UTCTimeKey,
   Units
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 import {
   booleanKey,
   Parameter,
   shortKey,
   utcTimeKey
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 //#units
 //#primitives
 //declare keyName

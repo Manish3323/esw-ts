@@ -1,4 +1,4 @@
-import { ConfigService } from '@tmtsoftware/esw-ts'
+import { ConfigService } from '@manish3323/esw-ts'
 import { createContext } from 'react'
 
 export let defaultConfigServiceState: ConfigService

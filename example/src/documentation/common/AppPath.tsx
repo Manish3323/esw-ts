@@ -1,4 +1,4 @@
-import { setAppConfigPath } from '@tmtsoftware/esw-ts'
+import { setAppConfigPath } from '@manish3323/esw-ts'
 import React from 'react'
 //#set-app-config-path
 // inside App.tsx

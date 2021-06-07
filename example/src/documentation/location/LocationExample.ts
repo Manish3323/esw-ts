@@ -9,7 +9,7 @@ import {
   ServiceError,
   TcpConnection,
   TrackingEvent
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 const auth = { token: '' }
 

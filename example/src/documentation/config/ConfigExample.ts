@@ -7,7 +7,7 @@ import {
   ConfigService,
   FileType,
   Option
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 //#config-data
 

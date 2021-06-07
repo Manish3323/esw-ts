@@ -6,7 +6,7 @@ import {
   LogMetadata,
   Prefix,
   SupervisorLifecycleState
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 //#admin-service-creation
 const adminService: AdminService = await AdminService()

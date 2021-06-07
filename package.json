@@ -1,9 +1,10 @@
 {
-  "name": "@tmtsoftware/esw-ts",
+  "name": "@manish3323/esw-ts",
   "main": "lib/dist/src/index.js",
   "module": "lib/dist/src/index.js",
   "typings": "lib/dist/src/index.d.ts",
   "scripts": {
     "install": "cd lib && npm install"
-  }
+  },
+  "version": "0.1.1"
 }

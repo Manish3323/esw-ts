@@ -3,7 +3,7 @@ import type {
   SubmitResponse,
   Subscription,
   ValidateResponse
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 import {
   CommandService,
   ComponentId,
@@ -14,7 +14,7 @@ import {
   Prefix,
   ServiceError,
   Setup
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 
 const auth = { token: '' }
 const paramSet: Parameter<IntKey>[] = []

@@ -9,7 +9,7 @@ import {
   Prefix,
   stringKey,
   utcTimeKey
-} from '@tmtsoftware/esw-ts'
+} from '@manish3323/esw-ts'
 //#state-variable
 //prefix
 
