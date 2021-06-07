@@ -13,6 +13,8 @@ import {
   SpawnResponseD
 } from '../../src/decoders/AgentDecoders'
 import { AlarmKeyD, AlarmSeverityD } from '../../src/decoders/AlarmDecoders'
+// eslint-disable-next-line
+import * as Seq from '../../src/decoders/SequencerDecoders'
 import {
   CommandIssueD,
   CommandResponseD,
@@ -53,7 +55,6 @@ import {
   ShutdownSequencersOrSeqCompResponseD,
   StartSequencerResponseD
 } from '../../src/decoders/SequenceManagerDecoders'
-import * as Seq from '../../src/decoders/SequencerDecoders'
 import { SubsystemD } from '../../src/decoders/SubsystemDecoder'
 import { UnitsD } from '../../src/decoders/UnitsDecoder'
 import { getOrThrow } from '../../src/utils/Utils'
@@ -195,6 +196,7 @@ const sequencerDecoders: Record<string, Decoder<any>> = {
   StepStatus: Seq.StepStatusD,
   Step: Seq.StepD,
   StepList: Seq.StepListD,
+  SequencerState: Seq.SequencerStateD,
   SequencerStateResponse: Seq.SequencerStateResponseD
 }
 

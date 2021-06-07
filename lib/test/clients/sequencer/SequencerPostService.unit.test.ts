@@ -1,5 +1,18 @@
 import * as D from 'io-ts/lib/Decoder'
 import { mocked } from 'ts-jest/utils'
+import {
+  ComponentId,
+  intKey,
+  Key,
+  Parameter,
+  Prefix,
+  Result,
+  Sequence,
+  SequenceCommand,
+  Setup,
+  stringKey,
+  Wait
+} from '../../../src'
 import { GatewaySequencerCommand } from '../../../src/clients/gateway/models/Gateway'
 import * as Req from '../../../src/clients/sequencer/models/PostCommand'
 import {
@@ -9,19 +22,7 @@ import {
 import { SequencerServiceImpl } from '../../../src/clients/sequencer/SequencerServiceImpl'
 import { SubmitResponseD } from '../../../src/decoders/CommandDecoders'
 import * as Res from '../../../src/decoders/SequencerDecoders'
-import { SequencerStateResponseD } from '../../../src/decoders/SequencerDecoders'
-import {
-  ComponentId,
-  intKey,
-  Key,
-  Parameter,
-  Prefix,
-  Result,
-  SequenceCommand,
-  Setup,
-  stringKey,
-  Wait
-} from '../../../src/models'
+import { SequencerStateD } from '../../../src/decoders/SequencerDecoders'
 import { HttpTransport } from '../../../src/utils/HttpTransport'
 import { Ws } from '../../../src/utils/Ws'
 import { verify } from '../../helpers/JestMockHelpers'
@@ -36,12 +37,12 @@ const eswTestPrefix = Prefix.fromString('ESW.test')
 const setupCommand = new Setup(eswTestPrefix, 'command-1', [])
 const waitCommand = new Wait(eswTestPrefix, 'command-1', [])
 const commands: SequenceCommand[] = [setupCommand, waitCommand]
-const sequence: SequenceCommand[] = [setupCommand]
+const sequence: Sequence = new Sequence([setupCommand])
 
 const mockResponse = Math.random().toString()
 const httpTransport: HttpTransport<
   GatewaySequencerCommand<Req.SequencerPostRequest>
-> = new HttpTransport('someUrl', () => undefined)
+> = new HttpTransport('someUrl', { tokenFactory: jest.fn() })
 const mockHttpTransport = mocked(httpTransport)
 
 const ws: Ws<GatewaySequencerCommand<SequencerWebsocketRequest>> = new Ws('someUrl')
@@ -395,7 +396,7 @@ describe('SequencerService', () => {
     expect(response).toEqual(mockResponse)
     verify(mockHttpTransport.requestRes).toBeCalledWith(
       getGatewaySequencerCommand(new Req.GetSequencerState()),
-      SequencerStateResponseD
+      SequencerStateD
     )
   })
 })

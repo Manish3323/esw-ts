@@ -1,4 +1,5 @@
 import type { Unhandled } from '../../../models'
+import type { StepList } from './StepList'
 
 export type Ok = {
   _type: 'Ok'
@@ -68,6 +69,15 @@ export type OperationsModeResponse = Ok | OperationsHookFailed
 /**
  * @category Sequencer Service
  */
-export type SequencerStateResponse = {
+export type SequencerState = {
   _type: 'Idle' | 'Processing' | 'Loaded' | 'Offline' | 'Running'
+}
+
+/**
+ * @category Sequencer Service
+ */
+export type SequencerStateResponse = {
+  _type: 'SequencerStateResponse'
+  stepList: StepList
+  sequencerState: SequencerState
 }

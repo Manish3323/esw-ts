@@ -12,28 +12,25 @@ object Libs {
 }
 
 object ESW {
-  val Version: String = {
-    sys.props.get("prod.publish") match {
-      case Some("true") => {
-        val env = sys.env ++ sys.props
-        env.getOrElse("ESW_VERSION", "754b6e337e")
-      }
-      case _ => "0.1.0-SNAPSHOT"
-    }
+  private val defaultESWVersion = "688ff7f004"
+
+  val Version: Option[String] = sys.props.get("prod.publish").collect {
+    case "true" =>
+      val env = sys.env ++ sys.props
+      env.getOrElse("ESW_VERSION", defaultESWVersion)
   }
 }
 
 object CSW {
-  val Version: String = {
-    sys.props.get("prod.publish") match {
-      case Some("true") => {
-        val env = sys.env ++ sys.props
-        env.getOrElse("CSW_VERSION", "efe5d22c46")
-      }
-      case _ => "0.1.0-SNAPSHOT"
-    }
+  private val defaultCswVersion = "33131de840"
+
+  val Version: Option[String] = sys.props.get("prod.publish").collect {
+    case "true" =>
+      val env = sys.env ++ sys.props
+      env.getOrElse("CSW_VERSION", defaultCswVersion)
   }
 
-  val `csw-location-server` = "com.github.tmtsoftware.csw" %% "csw-location-server" % Version
-  val `csw-config-server`   = "com.github.tmtsoftware.csw" %% "csw-config-server"   % Version
+  private val _version      = Version.getOrElse(defaultCswVersion)
+  val `csw-location-server` = "com.github.tmtsoftware.csw" %% "csw-location-server" % _version
+  val `csw-config-server`   = "com.github.tmtsoftware.csw" %% "csw-config-server"   % _version
 }

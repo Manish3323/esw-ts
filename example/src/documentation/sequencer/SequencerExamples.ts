@@ -11,11 +11,15 @@ import {
   PauseResponse,
   Prefix,
   RemoveBreakpointResponse,
+  Sequence,
   SequencerService,
+  SequencerState,
+  SequencerStateResponse,
+  ServiceError,
   Setup,
   StepList,
   SubmitResponse,
-  SequencerStateResponse
+  Subscription
 } from '@tmtsoftware/esw-ts'
 
 const auth = { token: '' }
@@ -25,7 +29,7 @@ const tokenFactory = () => auth.token
 
 const sequencerService: SequencerService = await SequencerService(
   new ComponentId(new Prefix('ESW', 'darknight'), 'Sequencer'),
-  tokenFactory
+  { tokenFactory }
 )
 //#Sequencer-Service-creation
 
@@ -41,13 +45,12 @@ const observeCommand2 = new Observe(eswTestPrefix, 'observe-command2')
 
 //#sequence-creation
 //sequence is a list of SequenceCommand
-const sequence = [setupCommand1, observeCommand1]
+const sequence = new Sequence([setupCommand1, observeCommand1])
 //#sequence-creation
 
 //#loadSequence
-const okOrUnhandledResponse: OkOrUnhandledResponse = await sequencerService.loadSequence(
-  sequence
-)
+const okOrUnhandledResponse: OkOrUnhandledResponse =
+  await sequencerService.loadSequence(sequence)
 const initialResponse: SubmitResponse = await sequencerService.startSequence()
 
 const queryResponse: SubmitResponse = await sequencerService.query(
@@ -94,15 +97,15 @@ const deleteResponse: GenericResponse = await sequencerService.delete(
 //#delete
 
 //#addBreakpoint
-const addBreakpointResponse: GenericResponse = await sequencerService.addBreakpoint(
-  'd99b6cf6-553c-49e9-9089-aaa494f116e9'
-)
+const addBreakpointResponse: GenericResponse =
+  await sequencerService.addBreakpoint('d99b6cf6-553c-49e9-9089-aaa494f116e9')
 //#addBreakpoint
 
 //#removeBreakpoint
-const removeBreakpointResponse: RemoveBreakpointResponse = await sequencerService.removeBreakpoint(
-  'd99b6cf6-553c-49e9-9089-aaa494f116e9'
-)
+const removeBreakpointResponse: RemoveBreakpointResponse =
+  await sequencerService.removeBreakpoint(
+    'd99b6cf6-553c-49e9-9089-aaa494f116e9'
+  )
 //#removeBreakpoint
 
 //#reset
@@ -138,7 +141,8 @@ const goOfflineResponse: GoOfflineResponse = await sequencerService.goOffline()
 //#goOffline
 
 //#abortSequence
-const abortResponse: OkOrUnhandledResponse = await sequencerService.abortSequence()
+const abortResponse: OkOrUnhandledResponse =
+  await sequencerService.abortSequence()
 //#abortSequence
 
 //#stop
@@ -146,14 +150,13 @@ const stopResponse: OkOrUnhandledResponse = await sequencerService.stop()
 //#stop
 
 //#diagnosticMode
-const diagnosticResponse: DiagnosticModeResponse = await sequencerService.diagnosticMode(
-  new Date(),
-  'engineering'
-)
+const diagnosticResponse: DiagnosticModeResponse =
+  await sequencerService.diagnosticMode(new Date(), 'engineering')
 //#diagnosticMode
 
 //#operationsMode
-const operationsModeResponse: OperationsModeResponse = await sequencerService.operationsMode()
+const operationsModeResponse: OperationsModeResponse =
+  await sequencerService.operationsMode()
 //#operationsMode
 
 //#submit
@@ -168,12 +171,29 @@ const queryFinalRes: SubmitResponse = await sequencerService.queryFinal(
 //#submit
 
 //#submitAndWait
-const submitAndWaitResponse: SubmitResponse = await sequencerService.submitAndWait(
-  sequence,
-  10
-)
+const submitAndWaitResponse: SubmitResponse =
+  await sequencerService.submitAndWait(sequence, 10)
 //#submitAndWait
 
 //#getSequencerState
-const getSequencerState: SequencerStateResponse = await sequencerService.getSequencerState()
+const getSequencerState: SequencerState =
+  await sequencerService.getSequencerState()
 //#getSequencerState
+//
+
+// #subscribeSequencerState
+const callBack = (sequencerStateResponse: SequencerStateResponse) => {
+  console.log(sequencerStateResponse)
+}
+const onErrorCallback = (error: ServiceError) => {
+  // do something when error occurs
+  // for ex : close connection / cleanup resources
+  console.log(error)
+}
+const subscription: Subscription = sequencerService.subscribeSequencerState()(
+  callBack,
+  onErrorCallback
+)
+//...
+subscription.cancel() // to unsubscribe
+//#subscribeSequencerState

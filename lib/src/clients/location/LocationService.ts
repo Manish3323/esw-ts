@@ -1,6 +1,6 @@
-import type { Option, Subscription, TokenFactory } from '../..'
+import type { AuthData, Option, Subscription } from '../..'
 import { LocationConfig } from '../../config'
-import type { ComponentType, Done, Prefix } from '../../models'
+import type { ComponentType, Done, Prefix, ServiceError } from '../../models'
 import { HttpTransport } from '../../utils/HttpTransport'
 import { getPostEndPoint, getWebSocketEndPoint } from '../../utils/Utils'
 import { Ws } from '../../utils/Ws'
@@ -87,9 +87,16 @@ export interface LocationService {
    *
    * @param connection          The Connection to be tracked
    * @param callback            A function which gets triggered whenever a tracking event is received
+   * @param onError             a optional error callback which gets called on receiving error.
+   *                            it can be Parsing error or a Runtime error [for ex. Gateway exception]
    * @return                    Subscription which provides a handle to cancel the subscription
    */
-  track(connection: Connection): (callBack: (trackingEvent: TrackingEvent) => void) => Subscription
+  track(
+    connection: Connection
+  ): (
+    callBack: (trackingEvent: TrackingEvent) => void,
+    onError?: (error: ServiceError) => void
+  ) => Subscription
 }
 
 /**
@@ -100,7 +107,7 @@ export interface LocationService {
  * @constructor
  */
 export const LocationService = (
-  tokenFactory: TokenFactory = () => undefined,
+  authData?: AuthData,
   locationConfig = LocationConfig
 ): LocationService => {
   const webSocketEndpoint = getWebSocketEndPoint({
@@ -112,7 +119,7 @@ export const LocationService = (
     port: locationConfig.port
   })
   return new LocationServiceImpl(
-    new HttpTransport(postEndpoint, tokenFactory),
-    () => new Ws(webSocketEndpoint)
+    new HttpTransport(postEndpoint, authData),
+    () => new Ws(webSocketEndpoint, authData?.username)
   )
 }

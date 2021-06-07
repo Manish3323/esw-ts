@@ -1,14 +1,14 @@
 import {
-  LocationService,
-  Location,
-  Prefix,
-  HttpConnection,
-  Option,
-  Done,
-  TrackingEvent,
   AkkaConnection,
+  Done,
+  HttpConnection,
+  Location,
+  LocationService,
+  Option,
+  Prefix,
+  ServiceError,
   TcpConnection,
-  HttpLocation
+  TrackingEvent
 } from '@tmtsoftware/esw-ts'
 
 const auth = { token: '' }
@@ -17,9 +17,9 @@ const auth = { token: '' }
 //#location-service-creation
 const tokenFactory = () => auth.token
 
-const locationServiceWithToken: LocationService = await LocationService(
+const locationServiceWithToken: LocationService = await LocationService({
   tokenFactory
-)
+})
 
 const locationService: LocationService = await LocationService()
 
@@ -35,9 +35,8 @@ const locations: Location[] = await locationService.list()
 //#list-by-component-type
 // valid Component types : HCD, Assembly, Service, Container, Sequencer, SequenceComponent and Machine
 
-const sequencerLocations: Location[] = await locationService.listByComponentType(
-  'Sequencer'
-)
+const sequencerLocations: Location[] =
+  await locationService.listByComponentType('Sequencer')
 
 const hcdLocations: Location[] = await locationService.listByComponentType(
   'HCD'
@@ -68,9 +67,8 @@ const remoteLocations: Location[] = await locationService.listByHostname(
   '192.0.162.178'
 )
 
-const locationRegisteredWithDomain: Location[] = await locationService.listByHostname(
-  'tmt.org.com'
-)
+const locationRegisteredWithDomain: Location[] =
+  await locationService.listByHostname('tmt.org.com')
 
 const localLocations: Location[] = await locationService.listByHostname(
   'localhost'
@@ -124,6 +122,11 @@ if (maybeLocation1) {
 
 //#track
 // a callback function
+const onErrorCallback = (error: ServiceError) => {
+  // do something when error occurs
+  // for ex : close connection / cleanup resources
+  console.log(error)
+}
 const onTrackingEvent = (event: TrackingEvent) => {
   if (event._type === 'LocationRemoved') {
     // do something when connection's location is removed from the location service
@@ -134,7 +137,7 @@ const onTrackingEvent = (event: TrackingEvent) => {
 // connection to be tracked
 const httpConnection = HttpConnection(new Prefix('ESW', 'component'), 'HCD')
 
-locationService.track(httpConnection)(onTrackingEvent)
+locationService.track(httpConnection)(onTrackingEvent, onErrorCallback)
 
 //#track
 const g = () => {

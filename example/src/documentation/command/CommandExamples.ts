@@ -1,19 +1,19 @@
+import type {
+  OnewayResponse,
+  SubmitResponse,
+  Subscription,
+  ValidateResponse
+} from '@tmtsoftware/esw-ts'
 import {
   CommandService,
   ComponentId,
   CurrentState,
   IntKey,
-  Setup,
   Observe,
   Parameter,
-  Prefix
-} from '@tmtsoftware/esw-ts'
-
-import type {
-  Subscription,
-  OnewayResponse,
-  SubmitResponse,
-  ValidateResponse
+  Prefix,
+  ServiceError,
+  Setup
 } from '@tmtsoftware/esw-ts'
 
 const auth = { token: '' }
@@ -25,7 +25,7 @@ const tokenFactory = () => auth.token
 
 const commandService: CommandService = await CommandService(
   new ComponentId(new Prefix('ESW', 'Component1'), 'HCD'),
-  tokenFactory
+  { tokenFactory }
 )
 //#command-service-creation
 
@@ -116,11 +116,16 @@ const onStateChangeCallback = (currentState: CurrentState) => {
   // do something when state changes
   console.log('changed state:', currentState)
 }
+const onErrorCallback = (error: ServiceError) => {
+  // do something when error occurs
+  // for ex : close connection / cleanup resources
+  console.log(error)
+}
 
 // subscribe call
 const subscription: Subscription = await commandService.subscribeCurrentState(
   currentStates
-)(onStateChangeCallback)
+)(onStateChangeCallback, onErrorCallback)
 
 // .
 // .
@@ -133,17 +138,13 @@ subscription.cancel()
 //#submit-and-wait
 // Submit a long running command and wait for the result for specific time
 
-const submitAndWaitResponse: SubmitResponse = await commandService.submitAndWait(
-  setupCommand,
-  10
-)
+const submitAndWaitResponse: SubmitResponse =
+  await commandService.submitAndWait(setupCommand, 10)
 //#submit-and-wait
 
 //#submit-all-and-wait
 // Submit multiple commands and wait for the result of each submitted command for specific time
 
-const submitAllAndWaitResponse: SubmitResponse[] = await commandService.submitAllAndWait(
-  [setupCommand, observeCommand],
-  10
-)
+const submitAllAndWaitResponse: SubmitResponse[] =
+  await commandService.submitAllAndWait([setupCommand, observeCommand], 10)
 //#submit-all-and-wait

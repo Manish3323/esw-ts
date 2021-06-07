@@ -1,4 +1,5 @@
 import type {
+  AuthData,
   DiagnosticModeResponse,
   GenericResponse,
   GoOfflineResponse,
@@ -8,16 +9,17 @@ import type {
   Option,
   PauseResponse,
   RemoveBreakpointResponse,
-  TokenFactory
+  Sequence,
+  Subscription
 } from '../..'
-import { GATEWAY_CONNECTION } from '../../config/Connections'
-import type { ComponentId, SequenceCommand, SubmitResponse } from '../../models'
+import { GATEWAY_CONNECTION } from '../../config'
+import type { ComponentId, SequenceCommand, ServiceError, SubmitResponse } from '../../models'
 import { HttpTransport } from '../../utils/HttpTransport'
 import { extractHostPort, getPostEndPoint, getWebSocketEndPoint } from '../../utils/Utils'
 import { Ws } from '../../utils/Ws'
 import type { Location } from '../location'
 import { resolve } from '../location/LocationUtils'
-import type { SequencerStateResponse } from './models/SequencerRes'
+import type { SequencerState, SequencerStateResponse } from './models/SequencerRes'
 import type { StepList } from './models/StepList'
 import { SequencerServiceImpl } from './SequencerServiceImpl'
 
@@ -31,7 +33,7 @@ export interface SequencerService {
    * @param sequence            a sequence to load in the sequencer
    * @returns                   OkOrUnhandledResponse as Promise
    */
-  loadSequence(sequence: SequenceCommand[]): Promise<OkOrUnhandledResponse>
+  loadSequence(sequence: Sequence): Promise<OkOrUnhandledResponse>
 
   /**
    * Runs the loaded sequence
@@ -191,7 +193,7 @@ export interface SequencerService {
    * @param sequence              sequence to run on the sequencer
    * @return                      SubmitResponse as Promise
    */
-  submit(sequence: SequenceCommand[]): Promise<SubmitResponse>
+  submit(sequence: Sequence): Promise<SubmitResponse>
 
   /**
    * Submit the given sequence to the sequencer and waits until sequence execution completed
@@ -201,7 +203,7 @@ export interface SequencerService {
    * @param timeoutInSeconds      timeout within which result is expected.
    * @return                      SubmitResponse as Promise
    */
-  submitAndWait(sequence: SequenceCommand[], timeoutInSeconds: number): Promise<SubmitResponse>
+  submitAndWait(sequence: Sequence, timeoutInSeconds: number): Promise<SubmitResponse>
 
   /**
    * Queries the response of sequence of the given runId
@@ -226,9 +228,23 @@ export interface SequencerService {
 
   /**
    * Returns the current state of the sequencer (Idle, Loaded, Offline, Running, Processing)
-   * @return                      SequencerStateResponse
+   * @return                      SequencerState
    */
-  getSequencerState(): Promise<SequencerStateResponse>
+  getSequencerState(): Promise<SequencerState>
+
+  /**
+   * Subscribes to the changes in state of sequencer which includes SequencerState (i.e Idle, Loaded, etc) and current StepList.
+   * The callback will be called with new SequencerStateResponse on state change and returns a subscription to unsubscribe.
+   *
+   * @param callback              the function which gets called on each state change
+   * @param onError               a optional error callback which gets called on receiving error.
+   *                              it can be Parsing error or a Runtime error [for ex. Gateway exception]
+   * @return                      Subscription
+   */
+  subscribeSequencerState(): (
+    onMessage: (sequencerStateResponse: SequencerStateResponse) => void,
+    onError?: (error: ServiceError) => void
+  ) => Subscription
 }
 
 /**
@@ -241,16 +257,16 @@ export interface SequencerService {
  */
 export const SequencerService = async (
   componentId: ComponentId,
-  tokenFactory: TokenFactory
+  authData?: AuthData
 ): Promise<SequencerService> => {
   const location = await resolve(GATEWAY_CONNECTION)
-  return createSequencerService(componentId, location, tokenFactory)
+  return createSequencerService(componentId, location, authData)
 }
 
 export const createSequencerService = (
   componentId: ComponentId,
   location: Location,
-  tokenFactory: TokenFactory
+  authData?: AuthData
 ): SequencerService => {
   const { host, port } = extractHostPort(location.uri)
   const postEndpoint = getPostEndPoint({ host, port })
@@ -258,7 +274,7 @@ export const createSequencerService = (
 
   return new SequencerServiceImpl(
     componentId,
-    new HttpTransport(postEndpoint, tokenFactory),
-    () => new Ws(webSocketEndpoint)
+    new HttpTransport(postEndpoint, authData),
+    () => new Ws(webSocketEndpoint, authData?.username)
   )
 }

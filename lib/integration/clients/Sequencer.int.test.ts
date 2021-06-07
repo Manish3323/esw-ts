@@ -1,16 +1,28 @@
 import 'whatwg-fetch'
-import { Option, setAppConfigPath } from '../../src'
-import { SequencerService, StepList } from '../../src/clients/sequencer'
-import type { SequencerStateResponse } from '../../src/clients/sequencer/models/SequencerRes'
+import {
+  ComponentId,
+  Option,
+  Prefix,
+  Sequence,
+  SequenceCommand,
+  SequencerService,
+  SequencerState,
+  SequencerStateResponse,
+  setAppConfigPath,
+  Setup,
+  StepList,
+  SubmitResponse
+} from '../../src'
 import { APP_CONFIG_PATH } from '../../src/config/AppConfigPath'
-import { ComponentId, Prefix, SequenceCommand, Setup, SubmitResponse } from '../../src/models'
 import { startServices, stopServices } from '../utils/backend'
 
 jest.setTimeout(90000)
 
 const eswTestPrefix = Prefix.fromString('ESW.test')
 const setupCommand = new Setup(eswTestPrefix, 'command', [])
-const sequence: SequenceCommand[] = [setupCommand]
+
+const commands: [SequenceCommand, ...SequenceCommand[]] = [setupCommand]
+const sequence: Sequence = new Sequence(commands)
 const validToken = 'validToken'
 let sequencerServiceWithToken: SequencerService
 let sequencerServiceWithoutToken: SequencerService
@@ -27,8 +39,10 @@ beforeAll(async () => {
   // setup location service and gateway
   setAppConfigPath('../../test/assets/appconfig/AppConfig.ts')
   await startServices(['AAS', 'Gateway'])
-  sequencerServiceWithToken = await SequencerService(componentId, () => validToken)
-  sequencerServiceWithoutToken = await SequencerService(componentId, () => undefined)
+  sequencerServiceWithToken = await SequencerService(componentId, {
+    tokenFactory: () => validToken
+  })
+  sequencerServiceWithoutToken = await SequencerService(componentId)
 })
 afterAll(async () => {
   await stopServices()
@@ -60,22 +74,22 @@ describe('Sequencer Client', () => {
   })
 
   test('should get ok response on add commands | ESW-307, ESW-99', async () => {
-    const response = await sequencerServiceWithToken.add(sequence)
+    const response = await sequencerServiceWithToken.add(commands)
     expect(response._type).toEqual('Ok')
   })
 
   test('should get ok response on prepend commands | ESW-307, ESW-99', async () => {
-    const response = await sequencerServiceWithToken.prepend(sequence)
+    const response = await sequencerServiceWithToken.prepend(commands)
     expect(response._type).toEqual('Ok')
   })
 
   test('should get ok response on replace | ESW-307, ESW-99', async () => {
-    const response = await sequencerServiceWithToken.replace('123', sequence)
+    const response = await sequencerServiceWithToken.replace('123', commands)
     expect(response._type).toEqual('Ok')
   })
 
   test('should get ok response on insertAfter | ESW-307, ESW-99', async () => {
-    const response = await sequencerServiceWithToken.insertAfter('123', sequence)
+    const response = await sequencerServiceWithToken.insertAfter('123', commands)
     expect(response._type).toEqual('Ok')
   })
 
@@ -200,8 +214,24 @@ describe('Sequencer Client', () => {
   })
 
   test('should get sequencer state | ESW-483', async () => {
-    const response: SequencerStateResponse = await sequencerServiceWithoutToken.getSequencerState()
+    const response: SequencerState = await sequencerServiceWithoutToken.getSequencerState()
 
     expect(response._type).toEqual('Running')
+  })
+
+  test('should get sequencer state response event on subscription | ESW-488', () => {
+    const events: SequencerStateResponse[] = []
+    expect.assertions(1)
+    return new Promise<void>(async (done) => {
+      const callBack = (sequencerStateResponse: SequencerStateResponse) => {
+        events.push(sequencerStateResponse)
+        if (events.length === 2) {
+          expect(events.map((x) => x.sequencerState._type)).toEqual(['Idle', 'Running'])
+          done()
+        }
+      }
+
+      sequencerServiceWithoutToken.subscribeSequencerState()(callBack)
+    })
   })
 })

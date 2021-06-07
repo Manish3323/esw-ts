@@ -4,11 +4,13 @@ import type {
   CurrentState,
   Location,
   OnewayResponse,
+  ServiceError,
   SubmitResponse,
   Subscription,
-  TokenFactory,
-  ValidateResponse
+  ValidateResponse,
+  AuthData
 } from '../..'
+
 import { GATEWAY_CONNECTION } from '../../config/Connections'
 import { HttpTransport } from '../../utils/HttpTransport'
 import { extractHostPort, getPostEndPoint, getWebSocketEndPoint } from '../../utils/Utils'
@@ -69,11 +71,16 @@ export interface CommandService {
    *
    * @param stateNames        Subscribe to the set of currentStates. If no states are provided, all the current states will be received.
    * @param onStateChange     a callback which gets called on change of any of the subscribed currentState
+   * @param onError           a optional error callback which gets called on receiving error.
+   *                          it can be Parsing error or a Runtime error [for ex. Gateway exception]
    * @return                  Subscription which can be used to cancel to the subscription in future.
    */
   subscribeCurrentState(
     stateNames: Set<string>
-  ): (onStateChange: (state: CurrentState) => void) => Subscription
+  ): (
+    onStateChange: (state: CurrentState) => void,
+    onError?: (error: ServiceError) => void
+  ) => Subscription
 
   /**
    * Submit a single command and wait for the result of the submitted command
@@ -104,16 +111,16 @@ export interface CommandService {
  */
 export const CommandService = async (
   componentId: ComponentId,
-  tokenFactory: TokenFactory = () => undefined
+  authData?: AuthData
 ): Promise<CommandService> => {
   const location = await resolve(GATEWAY_CONNECTION)
-  return createCommandService(componentId, location, tokenFactory)
+  return createCommandService(componentId, location, authData)
 }
 
 export const createCommandService = (
   componentId: ComponentId,
   location: Location,
-  tokenFactory: TokenFactory = () => undefined
+  authData?: AuthData
 ): CommandService => {
   const { host, port } = extractHostPort(location.uri)
   const url = getPostEndPoint({ host, port })
@@ -121,7 +128,7 @@ export const createCommandService = (
 
   return new CommandServiceImpl(
     componentId,
-    new HttpTransport(url, tokenFactory),
-    () => new Ws(webSocketEndpoint)
+    new HttpTransport(url, authData),
+    () => new Ws(webSocketEndpoint, authData?.username)
   )
 }

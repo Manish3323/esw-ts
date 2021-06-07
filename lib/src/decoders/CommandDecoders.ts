@@ -1,6 +1,5 @@
 import { pipe } from 'fp-ts/lib/function'
 import * as D from 'io-ts/lib/Decoder'
-import type { Sequence } from '../clients/sequencer'
 import type { Command, CommandType, Constructor, ControlCommand, SequenceCommand } from '../models'
 import { Observe, Setup, Wait } from '../models'
 import type * as CR from '../models/params/CommandResponse'
@@ -15,7 +14,7 @@ const mkCommandD = <L extends CommandType, T extends Command<L>>(
 ): Decoder<T> =>
   pipe(
     D.intersect(
-      D.type({
+      D.struct({
         _type: ciLiteral(_type),
         source: PrefixD,
         commandName: D.string,
@@ -38,8 +37,6 @@ export const SequenceCommandD: Decoder<SequenceCommand> = D.sum('_type')({
   Observe: ObserveD,
   Wait: WaitD
 })
-
-export const SequenceD: Decoder<Sequence> = D.struct({ commands: D.array(SequenceCommandD) })
 
 export const ControlCommandD: Decoder<ControlCommand> = D.sum('_type')({
   Setup: SetupD,
@@ -69,31 +66,31 @@ export const IssueTypesD: Decoder<CR.IssueTypes> = ciLiteral(
   'WrongUnitsIssue'
 )
 
-export const CommandIssueD: Decoder<CR.CommandIssue> = D.type({
+export const CommandIssueD: Decoder<CR.CommandIssue> = D.struct({
   _type: IssueTypesD,
   reason: D.string
 })
 
-const ErrorD: Decoder<CR.Error> = D.type({
+const ErrorD: Decoder<CR.Error> = D.struct({
   _type: ciLiteral('Error'),
   runId: D.string,
   message: D.string
 })
 
-const InvalidD: Decoder<CR.Invalid> = D.type({
+const InvalidD: Decoder<CR.Invalid> = D.struct({
   _type: ciLiteral('Invalid'),
   runId: D.string,
   issue: CommandIssueD
 })
 
-const CompletedD: Decoder<CR.Completed> = D.type({
+const CompletedD: Decoder<CR.Completed> = D.struct({
   _type: ciLiteral('Completed'),
   runId: D.string,
   result: ResultD
 })
 
 const mkCommandResD = <L extends string>(type: L): Decoder<{ _type: L; runId: string }> =>
-  D.type({
+  D.struct({
     _type: ciLiteral(type),
     runId: D.string
   })
@@ -133,3 +130,5 @@ export const OnewayResponseD: Decoder<CR.OnewayResponse> = D.sum('_type')({
   Invalid: InvalidD,
   Locked: LockedD
 })
+
+export const SequenceCommandsD = D.array(SequenceCommandD)
