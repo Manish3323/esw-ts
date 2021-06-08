@@ -32,30 +32,9 @@ jobs:
         working-directory: ./lib
         run: npm ci
 
-      - name: Build
-        run: |
-          sbtn scalafmtCheck
-          sbtn clean
-          sbtn -Dprod.publish=true makeSite
-          cd ./lib
-          npm run build
-
       - name: Unit tests
         working-directory: ./lib
         run: npm run test:unit:ci
-
-      - name: Integration tests
-        working-directory: ./lib
-        run: npm run test:integration:ci
-
-      - name: Build - Example App
-        working-directory: ./example
-        run: |
-          npm ci
-          npm run build
-
-      - name: Selenium Test
-        run: sbt -DgenerateStoryReport=true -DRTM_PATH=./RTM clean test
 
       - name: Generate RTM
         if: always()
@@ -63,46 +42,11 @@ jobs:
         run: |
           sh rtm.sh
 
-      - name: Upload RTM
-        if: always()
-        continue-on-error: true
-        uses: actions/upload-artifact@v2
-        with:
-          name: RTM
-          path: ./RTM
-
-      - name: Upload Coverage
-        if: always()
-        continue-on-error: true
-        uses: actions/upload-artifact@v2
-        with:
-          name: Coverage
-          path: ./lib/coverage
-
-      - name: NPM Publish
-        working-directory: ./lib
-        run: |
-          npm version <****> --allow-same-version --no-git-tag-version
-          npm publish --access public
+      - name: Upload RTM to Release artifacts
+        uses: fnkr/github-action-ghr@v1
+        if: startsWith(github.ref, 'refs/tags/')
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GHR_COMPRESS: xz
+          GHR_PATH: ./RTM/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docs Publish
-        run: |
-          echo 'echo $RELEASE_TOKEN' > /tmp/.git-askpass
-          chmod +x /tmp/.git-askpass
-          git config --global user.email "actions@github.com"
-          git config --global user.name "Github Action"
-          sbt -Dprod.publish=true clean ghpagesPushSite
-        env:
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-          GIT_ASKPASS: /tmp/.git-askpass
-
-      - name: Notify slack
-        if: always()
-        continue-on-error: true
-        uses: kpritam/slack-job-status-action@v1
-        with:
-          job-status: ${{ job.status }}
-          slack-bot-token: ${{ secrets.SLACK_BOT_TOKEN }}
-          channel: ci-release
