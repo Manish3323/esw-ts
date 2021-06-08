@@ -42,15 +42,11 @@ jobs:
         run: |
           sh rtm.sh
 
-      - name: Create release
-        uses: Roang-zero1/github-create-release-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload RTM to Release artifacts
-        uses: Roang-zero1/github-upload-release-artifacts-action@master
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          args:
-            ./RTM
+          files: |
+            ./RTM/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
