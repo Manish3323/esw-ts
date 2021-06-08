@@ -10,7 +10,7 @@ import {
 } from '@manish3323/esw-ts'
 
 const someService = {
-  api: () => {}
+  api: () => ({})
 }
 const auth = { token: '' }
 
@@ -61,13 +61,12 @@ const d = async () => {
   const sequenceManagerVersion = '1.0.0'
 
   try {
-    const spawnResponse: SpawnResponse =
-      await agentService.spawnSequenceManager(
-        agentPrefix,
-        obsModeConfigPath,
-        false,
-        sequenceManagerVersion
-      )
+    const spawnResponse: SpawnResponse = await agentService.spawnSequenceManager(
+      agentPrefix,
+      obsModeConfigPath,
+      false,
+      sequenceManagerVersion
+    )
 
     // spawn response handling (200 status code)
     switch (spawnResponse._type) {

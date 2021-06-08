@@ -29,12 +29,11 @@ const FailedToStartSequencersD: Decoder<T.FailedToStartSequencers> = D.struct({
   reasons: D.array(D.string)
 })
 
-const ConflictingResourcesWithRunningObsModeD: Decoder<T.ConflictingResourcesWithRunningObsMode> = D.struct(
-  {
+const ConflictingResourcesWithRunningObsModeD: Decoder<T.ConflictingResourcesWithRunningObsMode> =
+  D.struct({
     _type: ciLiteral('ConflictingResourcesWithRunningObsMode'),
     runningObsMode: D.array(ObsModeD)
-  }
-)
+  })
 
 const SpawningSequenceComponentsFailedD: Decoder<T.SpawningSequenceComponentsFailed> = D.struct({
   _type: ciLiteral('SpawningSequenceComponentsFailed'),

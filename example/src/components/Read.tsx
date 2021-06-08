@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
 import { AuthContext } from '@manish3323/esw-ts'
+import React, { useContext } from 'react'
 
 const Read = () => {
   // #Consumer-component-usage
   const { auth } = useContext(AuthContext)
   return (
-    <div className='nav-wrapper'>
+    <div className="nav-wrapper">
       {auth && auth.isAuthenticated() ? (
         <div>
           Hello, you are logged in

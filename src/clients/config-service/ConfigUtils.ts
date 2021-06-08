@@ -7,8 +7,10 @@ import { get, head } from '../../utils/Http'
 import { getOrThrow } from '../../utils/Utils'
 import { ConfigData } from './models/ConfigData'
 
-export const decodeUsing = <T>(decoder: Decoder<T>) => (obj: unknown) =>
-  getOrThrow(decoder.decode(obj))
+export const decodeUsing =
+  <T>(decoder: Decoder<T>) =>
+  (obj: unknown) =>
+    getOrThrow(decoder.decode(obj))
 
 export const tryGetConfigBlob = async (url: string): Promise<Option<ConfigData>> => {
   const mayBeConfigData = await map404(get({ url, responseMapper: (res) => res.blob() }), undefined)

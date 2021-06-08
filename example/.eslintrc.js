@@ -2,7 +2,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'plugin:@typescript-eslint/recommended',
-    'prettier/@typescript-eslint',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'plugin:jest/recommended',
@@ -18,7 +17,7 @@ module.exports = {
     '@typescript-eslint/camelcase': 0,
     //fixme: temp fix for any type present in ConfigService and Http
     '@typescript-eslint/no-explicit-any':0,
-    'import/no-absolute-path': 2,
+    'import/no-absolute-path': 2, 
     'import/first': 2,
     'import/order': 0,
     'jest/expect-expect': 0
@@ -32,6 +31,5 @@ module.exports = {
     'react': {
       'version': 'detect'
     }
-
   }
 }

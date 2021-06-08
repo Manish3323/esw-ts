@@ -1,11 +1,5 @@
 import type { IntKey, Option, StringKey } from '@manish3323/esw-ts'
-import {
-  stringKey,
-  intKey,
-  Prefix,
-  Parameter,
-  Result
-} from '@manish3323/esw-ts'
+import { stringKey, intKey, Prefix, Parameter, Result } from '@manish3323/esw-ts'
 //#result
 //keys
 
@@ -30,7 +24,7 @@ const r2: Result = new Result([p1, p2])
 const r3: Result = new Result().add(p1).add(p2).add(p3)
 
 //access keys
-const k1Exists: Boolean = r1.exists(k1) //true
+const k1Exists: boolean = r1.exists(k1) //true
 
 //access Parameters
 const p4: Option<Parameter<IntKey>> = r1.get(k1)

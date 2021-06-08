@@ -1,7 +1,7 @@
-import React, { ChangeEvent, useContext, useState } from 'react'
-import IOOperationComponent from './IOOperationComponent'
-import { ConfigContext } from './context/ConfigContext'
 import { ConfigData, ConfigId } from '@manish3323/esw-ts'
+import React, { ChangeEvent, useContext, useState } from 'react'
+import { ConfigContext } from './context/ConfigContext'
+import IOOperationComponent from './IOOperationComponent'
 
 export function CreateConfig() {
   const [response, setResponse] = useState('')
@@ -23,27 +23,21 @@ export function CreateConfig() {
     setFileContent(event.target.value)
 
   return (
-    <div className='card-panel hoverable'>
+    <div className="card-panel hoverable">
       <IOOperationComponent
-        txtId='file-path'
-        btnId='create-config'
-        componentNameProp='Create Config'
-        operation='Create Config'
+        txtId="file-path"
+        btnId="create-config"
+        componentNameProp="Create Config"
+        operation="Create Config"
         output={response}
         api={createConfig}
       />
-      <div className='card-panel hoverable'>
+      <div className="card-panel hoverable">
         File Content
         <span>
-          <textarea
-            id='file-content-txt-area'
-            value={fileContent}
-            onChange={updateFileContent}
-          />
+          <textarea id="file-content-txt-area" value={fileContent} onChange={updateFileContent} />
         </span>
       </div>
     </div>
   )
 }
-
-export default CreateConfig

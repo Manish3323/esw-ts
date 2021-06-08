@@ -1,19 +1,9 @@
-import type {
-  BooleanKey,
-  ShortKey,
-  UTCTimeKey,
-  Units
-} from '@manish3323/esw-ts'
-import {
-  booleanKey,
-  Parameter,
-  shortKey,
-  utcTimeKey
-} from '@manish3323/esw-ts'
+import type { BooleanKey, ShortKey, UTCTimeKey, Units } from '@manish3323/esw-ts'
+import { booleanKey, Parameter, shortKey, utcTimeKey } from '@manish3323/esw-ts'
 //#units
 //#primitives
 //declare keyName
-const s1: string = 'encoder'
+const s1 = 'encoder'
 
 //making 2 keys
 const k1 = booleanKey(s1)
@@ -35,8 +25,6 @@ const allValues: Array<number> = paramWithShorts1.values
 // paramWithUnits3.units === "meter")
 
 //default unit for UTCTimeKey is second
-const tParam: Parameter<UTCTimeKey> = utcTimeKey('now').set([
-  new Date().toUTCString()
-])
+const tParam: Parameter<UTCTimeKey> = utcTimeKey('now').set([new Date().toUTCString()])
 const defaultTimeUnit: Units = tParam.units //is second
 //#units
