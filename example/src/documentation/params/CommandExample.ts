@@ -9,7 +9,7 @@ import {
   Wait
 } from '@manish3323/esw-ts'
 //#obsid
-const obsId = 'Obs001'
+const obsId: string = 'Obs001'
 //#obsid
 
 //#prefix
@@ -17,7 +17,7 @@ const prefix: Prefix = new Prefix('NFIRAOS', 'ncc.trombone')
 //#prefix
 const d = () => {
   //#setup
-  const obsId = 'Obs001'
+  const obsId: string = 'Obs001'
   const prefix: Prefix = new Prefix('NFIRAOS', 'ncc.trombone')
   const commandName = 'move'
   const filterKey = intArrayKey('filter')
@@ -31,7 +31,7 @@ const d = () => {
 }
 const dd = () => {
   //#observe
-  const obsId = 'Obs001'
+  const obsId: string = 'Obs001'
   const prefix: Prefix = new Prefix('NFIRAOS', 'ncc.trombone')
   const commandName = 'move'
   const filterKey = intArrayKey('filter')
@@ -40,12 +40,17 @@ const dd = () => {
     [4, 5, 6]
   ])
 
-  const observe: Observe = new Observe(prefix, commandName, [filterParam], obsId)
+  const observe: Observe = new Observe(
+    prefix,
+    commandName,
+    [filterParam],
+    obsId
+  )
   //#observe
 }
 const ddd = () => {
   //#wait
-  const obsId = 'Obs001'
+  const obsId: string = 'Obs001'
   const prefix: Prefix = new Prefix('NFIRAOS', 'ncc.trombone')
   const commandName = 'move'
   const filterKey = intArrayKey('filter')
@@ -60,7 +65,7 @@ const ddd = () => {
 
 const dddd = () => {
   //#unique-key
-  const obsId = 'Obs001'
+  const obsId: string = 'Obs001'
   const prefix: Prefix = new Prefix('NFIRAOS', 'ncc.trombone')
   const commandName = 'move'
   const filterKey = intArrayKey('filter')

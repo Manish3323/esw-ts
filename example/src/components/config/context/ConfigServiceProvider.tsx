@@ -1,5 +1,5 @@
-import { AuthContext, ConfigService } from '@manish3323/esw-ts'
 import React, { useContext, useEffect, useState } from 'react'
+import { AuthContext, ConfigService } from '@manish3323/esw-ts'
 import { ConfigContext, defaultConfigServiceState } from './ConfigContext'
 
 //#config-service-provider
@@ -11,7 +11,9 @@ export interface ConfigServiceProps {
 const ConfigServiceProvider = (props: ConfigServiceProps) => {
   const { authContext, children } = props
 
-  const [configService, setConfigService] = useState<ConfigService>(defaultConfigServiceState)
+  const [configService, setConfigService] = useState<ConfigService>(
+    defaultConfigServiceState
+  )
   // #use-auth-context
   const { auth } = useContext(authContext)
   // #use-auth-context
@@ -23,10 +25,16 @@ const ConfigServiceProvider = (props: ConfigServiceProps) => {
   }
 
   useEffect(() => {
-    resetConfigService().catch(() => window.alert('config server is not available'))
+    resetConfigService().catch(() =>
+      window.alert('config server is not available')
+    )
   }, [auth])
 
-  return <ConfigContext.Provider value={configService}>{children}</ConfigContext.Provider>
+  return (
+    <ConfigContext.Provider value={configService}>
+      {children}
+    </ConfigContext.Provider>
+  )
 }
 //#config-service-provider
 

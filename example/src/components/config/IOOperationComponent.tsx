@@ -1,21 +1,27 @@
 import React, { ChangeEvent, ChangeEventHandler, useState } from 'react'
 
-const IOOperationComponent = (props: IOOperationProps) => {
+function IOOperationComponent(props: IOOperationProps) {
   const [input, setInput] = useState('')
   const { txtId, btnId, componentNameProp, operation, output } = props
 
-  const updateInput: ChangeEventHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const updateInput: ChangeEventHandler = (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setInput(event.target.value)
   }
 
   const handleClick = () => props.api(input)
 
   return (
-    <div className="card-panel hoverable">
+    <div className='card-panel hoverable'>
       <h6>{componentNameProp} Request</h6>
       <div>
         <span>
-          <textarea id={txtId + '-txt-area'} value={input} onChange={updateInput} />
+          <textarea
+            id={txtId + '-txt-area'}
+            value={input}
+            onChange={updateInput}
+          />
         </span>
       </div>
       <div>

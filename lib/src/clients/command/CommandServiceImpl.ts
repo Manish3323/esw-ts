@@ -61,20 +61,18 @@ export class CommandServiceImpl implements CommandService {
     )
   }
 
-  subscribeCurrentState =
-    (stateNames: Set<string>) =>
-    (
-      onStateChange: (state: M.CurrentState) => void,
-      onError?: (error: ServiceError) => void
-    ): Subscription => {
-      const subscriptionResponse = this.subscribe(stateNames, onStateChange, onError)
-      return {
-        cancel: async () => {
-          const response = await subscriptionResponse
-          return response.cancel()
-        }
+  subscribeCurrentState = (stateNames: Set<string>) => (
+    onStateChange: (state: M.CurrentState) => void,
+    onError?: (error: ServiceError) => void
+  ): Subscription => {
+    const subscriptionResponse = this.subscribe(stateNames, onStateChange, onError)
+    return {
+      cancel: async () => {
+        const response = await subscriptionResponse
+        return response.cancel()
       }
     }
+  }
 
   queryFinal(runId: string, timeoutInSeconds: number): Promise<M.SubmitResponse> {
     return this.ws().singleResponse(

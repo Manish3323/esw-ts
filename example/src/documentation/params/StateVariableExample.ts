@@ -29,9 +29,14 @@ const booleanParam = booleanKey1.set([true, false])
 const utcTime = utcTimeKey1.set([new Date().toUTCString()])
 
 //create CurrentState and use sequential add
-const cs1 = new CurrentState(prefix, 'testStateName').add(charParam).add(intParam)
+const cs1 = new CurrentState(prefix, 'testStateName')
+  .add(charParam)
+  .add(intParam)
 //create CurrentState and add more than one Parameters using madd
-const cs2 = new CurrentState(prefix, 'testStateName').madd([intParam, booleanParam])
+const cs2 = new CurrentState(prefix, 'testStateName').madd([
+  intParam,
+  booleanParam
+])
 //create CurrentState using apply
 const cs3 = new CurrentState(prefix, 'testStateName', [utcTime])
 
@@ -49,7 +54,7 @@ const v2: Option<boolean[]> = cs2.get(booleanKey1)?.values
 const cs4 = cs3.remove(utcTimeKey1)
 
 //update existing keys - set it back by an hour
-const today = new Date()
+var today = new Date()
 today.setHours(today.getHours() - 1)
 const cs5 = cs3.add(utcTimeKey1.set([today.toUTCString()]))
 //#state-variable

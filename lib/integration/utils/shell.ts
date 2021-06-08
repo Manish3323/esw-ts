@@ -8,25 +8,21 @@ const scriptDir = path.resolve(__dirname, '../../scripts')
 export const appsLauncherScript = path.resolve(scriptDir, 'appLauncher.sh')
 export const stopServicesScript = path.resolve(scriptDir, 'stopServices.sh')
 
-const executeScript =
-  (script: string, appName = '', appVersion = '') =>
-  (args: string[]) => {
-    const cmd = [script, appName, appVersion, ...args]
-    console.log(`Executing cmd : ${cmd.join(' ')}`)
+const executeScript = (script: string, appName = '', appVersion = '') => (args: string[]) => {
+  const cmd = [script, appName, appVersion, ...args]
+  console.log(`Executing cmd : ${cmd.join(' ')}`)
 
-    const child = exec(cmd.join(' '))
-    if (child.stdout != null) child.stdout.pipe(process.stdout)
-    return child
-  }
+  const child = exec(cmd.join(' '))
+  if (child.stdout != null) child.stdout.pipe(process.stdout)
+  return child
+}
 
-const executeScriptSync =
-  (script: string, appName = '', appVersion = '') =>
-  (args: string[]) => {
-    const cmd = [script, appName, appVersion, ...args]
-    console.log(`Executing cmd : ${cmd.join(' ')}`)
+const executeScriptSync = (script: string, appName = '', appVersion = '') => (args: string[]) => {
+  const cmd = [script, appName, appVersion, ...args]
+  console.log(`Executing cmd : ${cmd.join(' ')}`)
 
-    execSync(cmd.join(' '))
-  }
+  execSync(cmd.join(' '))
+}
 
 const appLauncher = (name: string, version = 'master-SNAPSHOT') =>
   executeScript(appsLauncherScript, name, version)

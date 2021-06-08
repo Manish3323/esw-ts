@@ -16,8 +16,9 @@ jest.mock('../../../src/utils/HttpTransport')
 const compId: ComponentId = new ComponentId(new Prefix('ESW', 'test'), 'Assembly')
 const callback = () => ({})
 const onError = () => ({})
-const httpTransport: HttpTransport<GatewayComponentCommand<CommandServicePostMessage>> =
-  new HttpTransport('')
+const httpTransport: HttpTransport<
+  GatewayComponentCommand<CommandServicePostMessage>
+> = new HttpTransport('')
 const ws = new Ws('')
 
 const mockedWsTransport = mocked(ws)

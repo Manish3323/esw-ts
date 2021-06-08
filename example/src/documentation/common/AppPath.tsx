@@ -5,7 +5,7 @@ import React from 'react'
 
 setAppConfigPath('randomFolder/randomFile.ts')
 
-export const AppPath = () => <div>{/* children components */}</div>
+export default () => <div>{/* children components */}</div>
 
 //#set-app-config-path
 

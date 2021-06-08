@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
-import { ConfigContext } from './context/ConfigContext'
 import IOOperationComponent from './IOOperationComponent'
+import { ConfigContext } from './context/ConfigContext'
 
 function ListConfig() {
   const [response, setResponse] = useState('')
@@ -12,10 +12,10 @@ function ListConfig() {
 
   return (
     <IOOperationComponent
-      txtId="list-config"
-      btnId="list-config"
-      componentNameProp="List Config"
-      operation="List"
+      txtId='list-config'
+      btnId='list-config'
+      componentNameProp='List Config'
+      operation='List'
       output={response}
       api={listConfig}
     />

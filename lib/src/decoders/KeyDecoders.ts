@@ -33,17 +33,17 @@ const ParamBodyDecoder = <T>(valuesDec: Decoder<T>): ParamDecoder<T> =>
 
 export const paramDecoders: Record<string, ParamDecoder<unknown>> = {}
 
-const mkRawKeyD =
-  <KType>(kType: Decoder<KType>) =>
-  <KTag extends string>(kTag: KTag): Decoder<KeyType<KTag, KType>> => {
-    // populate [key -> decoder] record, used while decoding parameter
-    paramDecoders[kTag] = ParamBodyDecoder(kType)
+const mkRawKeyD = <KType>(kType: Decoder<KType>) => <KTag extends string>(
+  kTag: KTag
+): Decoder<KeyType<KTag, KType>> => {
+  // populate [key -> decoder] record, used while decoding parameter
+  paramDecoders[kTag] = ParamBodyDecoder(kType)
 
-    return D.struct({
-      keyTag: ciLiteral(kTag),
-      keyType: kType
-    })
-  }
+  return D.struct({
+    keyTag: ciLiteral(kTag),
+    keyType: kType
+  })
+}
 /* eslint-disable  @typescript-eslint/no-unused-vars */
 // Simple Keys
 const mkNumberKeyD = mkRawKeyD<number>(D.number)

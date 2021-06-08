@@ -2,7 +2,7 @@ import React from 'react'
 
 import ExampleApp from './components/ExampleApp'
 
-export const App = () => (
+export default () => (
   <div>
     <ExampleApp />
   </div>
