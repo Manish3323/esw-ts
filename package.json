@@ -5,5 +5,8 @@
   "typings": "lib/dist/src/index.d.ts",
   "scripts": {
     "install": "cd lib && npm install"
-  }
+  },
+  "files": [
+    "lib/dist/src"
+  ]
 }
