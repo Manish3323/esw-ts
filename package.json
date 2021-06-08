@@ -4,7 +4,7 @@
   "module": "lib/dist/src/index.js",
   "typings": "lib/dist/src/index.d.ts",
   "scripts": {
-    "install": "cd lib && npm run prepare"
+    "install": "cd ./lib && npm install"
   },
   "version": "0.1.1"
 }

@@ -4,9 +4,9 @@
   "license": "Apache License, Version 2.0",
   "private": true,
   "dependencies": {
-    "@manish3323/esw-ts": "0.1.4",
-    "react": "file:../lib/node_modules/react",
-    "react-dom": "file:../lib/node_modules/react-dom",
+    "@manish3323/esw-ts": "git+https://github.com/manish3323/esw-ts#c833e87c4355c6c3d22c6028474bc01c18305791",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-router-dom": "^5.2.0"
   },
   "scripts": {
